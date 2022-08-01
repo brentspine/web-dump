@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" href="./cookie_click_test1_style.css"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+	<div class="row1">
+		<div class="column1">
+			<div class="stats-banner">
+				<div class="stats-container-banner">
+					<div id="total-cookies-container">-1 Cookies</div>
+					<div id="cookies-second">0 Cookies per seconds</div>
+				</div>
+			</div>
+			<div id="cookie-container">
+				<img src="https://abload.de/img/d6c3c567-0860-4e47-834ckzn.png" alt="image" id="cookie" onclick="clickCookie()">
+			</div>
+		</div>
+		<div class="column2">2</div>
+		<div class="column3">
+			<div id="upgrade-list" class="upgrade-list">
+			
+			</div>
+			<div id="shop-list" class="shop-list">
+				<div class="shop-item shop-grandma">
+					<div class="icon">
+						<img class="icon-img" src="./images/Cursor.png">
+					</div>
+					<span class="name">
+						<b>Cursor</b>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+		const numberUnits = ["million", "billion", "trillion", "quadrillion", "quintillion", "sextillion", "septillion", "octillion", "nonillion", "decillion", "undecillion", "duodecillion", "tredecillion", "quattuordecillion", "quindecillion", "sexdecillion", "septendecillion", "octodecillion", "novemdecillion", "vigintillion"]
+		
+		const shopItems = [
+			"cursor", "grandma", "farm", "mine", "factory", "bank", "temple", "wizard_tower", "shipment", "alchemy_lab", "portal", "time_machine", "antimatter_condenser", "prism", "chancemaker", "fractal_engine", "javascript_console", "idleverse"
+		]
+		
+		const shopNames = [
+			"Cursor", "Grandma", "Farm", "Mine", "Factory", "Bank", "Temple", "Wizard Tower", "Shipment", "Alchemy Lab", "Portal", "Time Machine", "Antimatter Condenser", "Prism", "Chancemaker", "Fractal Engine", "Javascript Console", "Idleverse"
+		]
+		
+		const shopCosts = [
+			15, 100, 1100, 12000, 130_000,
+			1.4*10**6, 20*10**6, 330*10**6,
+			5.1*10**9, 75*10**9, 1*10**12,
+			14*10**12, 170*10**12,
+			2.1*10**15,26*10**15, 310*10**15,
+			71*10**18, 12*10**21
+		]
+		
+		const shopCPS = [
+			0.1, 1, 8, 47, 260, 1400, 7800, 44000, 260000, 1.6*10**6, 10*10**6, 65*10**6, 430*10**6, 2.9*10**9, 21*10**9, 150*10**9, 1.1*10**12, 8.3*10**12
+		]
+		
+		const itemsOwned = [
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0
+		]
+		
+		let cookiesPerClick = 1
+		let cookies = 0
+		
+		let perSecond = 0
+		
+		setInterval(function() {
+    	cookies += perSecond
+			updateCookies()
+		}, 1000)
+		
+		let str = ""
+		for (i in shopItems) {
+			current = shopItems[i]
+			str += '<div class="shop-item" id="shop-' + current + '" onclick="buy(' + i + ', 1)">\n'
+			
+			str += '<div class="icon">\n<img class="icon-img" src="./images/' + current + '.png">\n</div>'
+			
+			str += '<span class="name">\n<b>' + shopNames[i] + '</b>\n</span>\n'
+			
+			str += '<span class="cost" id="shop-' + current + '-cost"><img src="https://abload.de/img/d6c3c567-0860-4e47-834ckzn.png"> ' + translateNumber(shopCosts[i]) + '</span>'
+			
+			str += '<span class="amount" id="shop-' + current + '-amount">' + itemsOwned[i] + '</span>'
+			
+			str += '</div>\n</div>'
+		}
+		
+		document.getElementById("shop-list").innerHTML = str
+		
+		updateCookies()
+		updateCookiesPerSecond()
+	
+		function buy(id, amount) {
+			if(cookies >= shopCosts[id] * amount) {
+				cookies -= shopCosts[id] * amount
+				itemsOwned[id] += amount
+				shopCosts[id] = Math.round(shopCosts[id] * 1.15)
+				updateCookies()
+				updateCookiesPerSecond()
+				updateShop(id)
+			}
+		}
+		
+		function updateShop(id) {
+			document.getElementById("shop-" + shopItems[id] +  "-amount").innerHTML = itemsOwned[id]
+			
+			document.getElementById("shop-" + shopItems[id] + "-cost").innerHTML = '<img src="https://abload.de/img/d6c3c567-0860-4e47-834ckzn.png"> ' + translateNumber(shopCosts[id])
+		}
+		
+		function clickCookie() {
+			cookies += cookiesPerClick
+			updateCookies()
+			scaleCookie()
+		}
+		
+		function updateCookies() {
+			document.getElementById("total-cookies-container").innerHTML = "<b>" + translateNumber(cookies) + " Cookies </b>"
+		}
+		
+		function updateCookiesPerSecond() {
+			
+			r = 0
+			for (i in shopItems) {
+				r += itemsOwned[i] * shopCPS[i]
+			}
+			
+			perSecond = r
+			
+			if(numLen(r) > 2) {
+				r = translateNumber(r)
+			}
+			
+			document.getElementById("cookies-second").innerHTML = r + " cookies per second"
+		}
+		
+		function translateNumber(num) {
+			len = numLen(num)
+			if(len <= 6)
+				return num.toFixed(0).toLocaleString()
+			power = 0
+			i = -2
+			while (len > 3){
+				power += 3
+				len -= 3
+				i++
+			}
+			if((i + 1) <= numberUnits.length)
+				return (num / 10**power).toFixed(3) + " " + numberUnits[i] 
+			return (num / 10**power).toFixed(3) + " undefined number"
+		}
+		
+		var div = document.getElementById("cookie")
+
+    function scaleCookie() {
+      div.classList.add("scale")
+    }
+
+    function unscaleCookie() {
+      div.classList.remove("scale")
+    }
+
+    div.addEventListener('transitionend', unscaleCookie);
+		
+		function numLen(num) {
+			let length = 0
+  		let n = Math.abs(num)
+
+  		do {
+    		n /=  10
+    		length++
+  		} while (n >= 1)
+
+  		return length
+		}
+	</script>
+	
+	
+</body>
+
+</html>

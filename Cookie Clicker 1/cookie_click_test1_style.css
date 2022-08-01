@@ -1,0 +1,144 @@
+body {
+	padding: 0;
+	margin: 0;
+}
+
+.column1,
+.column2,
+.column3 {
+	float: left;
+	height: 100vh;
+}
+
+.column1 {
+  width: 40%;
+	background-color: red;
+}
+.column2 {
+	width: 0%;
+	background-color: blue;
+}
+.column3 {
+	width: 60%;
+	background-color: grey;
+	overflow: scroll;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+#cookie-container {
+	margin: 0;
+  position: absolute;
+	left: 14%;
+  top: 60%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+#cookie-container img {
+	height: 17%;
+	width: 17%;
+}
+
+.column1 .stats-banner {
+	width: 100%;
+	height: 8%;
+	top: 100%;
+	background-color: grey;
+	opacity: 75%;
+	float: left;
+	display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.column1 #total-cookies-container {
+	text-align: center;
+	font-size: 1.5vh;
+}
+
+.column1 #cookies-second {
+	text-align: center;
+	font-size: 1vh;
+}
+
+
+.column1 #cookie-container {
+	transform: scale(1, 1);
+	transition: transform 0s 0s;
+}
+
+.column1 #cookie-container .scale {
+	transform: scale(1.1, 1.1);
+	transition: transform 0.15s;
+}
+
+#cookies-second {
+	/*top: 80%;*/
+	margin: auto;
+}
+
+.stats-container-banner {
+	display: inline-block;
+}
+
+.shop-item {
+	height: 12vh;
+	background-color: blue;
+	display: flex;
+	width: 100%;
+}
+.shop-item img {
+	height: 6vh;
+	width: 6vh;
+  padding-top: 3vh;
+	padding-left: 1vh;
+}
+.shop-item .icon {
+	float: left;
+	width: 20%;
+}
+.shop-item .name {
+	/*margin: 0;
+  position: absolute;
+  top: 6vh;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);*/
+	
+	padding-top: 5vh;
+	float: left;
+	width: 150%;
+	font-size: 1vh;
+	padding-left: 1.8vh;
+	display: inline-block;
+	position: relative;
+}
+
+.shop-item .amount {
+	padding-top: 5vh;
+	padding-right: 2vh;
+	float: right;
+	font-size: 2vh;
+	color: gray;
+	position: relative;
+}
+.shop-item .cost {
+	top: 6.75vh;
+	float: left;
+	width: 110%;
+	font-size: 0.8vh;
+	left: -10vh;
+	display: inline-block;
+	position: relative;
+}
+.shop-item .cost img {
+	height: 0.7vh;
+	width: 0.7vh;
+	padding: 0;
+	margin: 0;
+}
