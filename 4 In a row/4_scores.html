@@ -1,0 +1,157 @@
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"/>
+
+<style>
+	td {
+		font-size: 35px;
+	}
+	
+	#table {
+		border: 1px solid #999;
+		padding: 1rem 1rem;
+	}
+	
+	td {
+		border: 1px solid #999;
+		margin: 5px;
+	}
+	
+	img {
+		height: 2rem;
+	}
+</style>
+<div id="container">
+  <div id="game">
+		<h1>4 in a row</h1>
+    <table id="table">
+     	
+    </table>
+		<h3 id="turn">Turn: </h3><button onclick="restart()">Restart</button>
+  </div>
+</div>
+
+<script>    
+  let table = document.getElementById("table");
+  
+	let field = [[],[],[],[],[],[],[],[] ];
+	
+	let turn = 1;
+	let over = false;
+	let winner = 1;
+  
+	for (var i = 0; i < 8; i++) {
+		table.innerHTML += '<tr id="row-'+i+'"><tr>';
+	}
+	let x = 0;
+	for (var i = 0; i < 8; i++) {
+		let row = document.getElementById("row-" + i);
+		for (var j = 0; j < 8; j++) {
+			row.innerHTML += '<td id="'+i+'-'+j+'"; onclick="interact('+i+','+j+')">'+x+'</td>';
+			field[i][j] = 0;
+			x++;
+		}
+	}
+	
+  updateField();
+  
+	function interact(i, j) {
+		
+		var contains = false;
+		for (var x = 7; x >= 0; x--) {
+			if(field[x][j] == 0) {
+				field[x][j] = turn;
+				contains = true;
+				break;
+			}
+		}
+		
+		if(contains) {
+			if(turn == 1)
+				turn = 2
+			else
+				turn = 1
+		}
+		updateField();
+	}
+	
+  function updateField() {
+		var x = 0;
+    for (let i = 0; i < 8; i++) { 
+			for (var j = 0; j < 8; j++) {
+				document.getElementById(i+'-'+j).innerHTML = getSymbol(field[i][j]);
+				x++;
+			}
+    }
+		document.getElementById("turn").innerHTML = "Turn: " + getSymbol(turn);
+		
+		win = checkWin();
+		if(win != 0) {
+			over = true;
+		document.getElementById("turn").innerHTML = "Winner: " + getSymbol(win) + "<br>Game by Brentspine";
+	}
+	}
+	
+	function checkWin() {
+		for (var i = 0; i < 5; i++) {
+			for (var j = 0; j < 8; j++) {
+				if (field[i][j] != 0 &&
+           field[i][j] == field[i+1][j] &&
+           field[i][j] == field[i+2][j] &&
+           field[i][j] == field[i+3][j])
+					 return field[i][j];
+			}
+		}
+		for (var i = 0; i < 8; i++) {
+			for (var j = 0; j < 5; j++) {
+				if (field[i][j] != 0 &&
+           field[i][j] == field[i][j + 1] &&
+           field[i][j] == field[i][j + 2] &&
+           field[i][j] == field[i][j + 3])
+					 return field[i][j];
+			}
+		}
+		for (var i = 0; i < 5; i++) {
+			for (var j = 0; j < 5; j++) {
+				if (field[i][j] != 0 &&
+           field[i][j] == field[i + 1][j + 1] &&
+           field[i][j] == field[i + 2][j + 2] &&
+           field[i][j] == field[i + 3][j + 3])
+					 return field[i][j];
+			}
+		}
+		for (var i = 3; i < 8; i++) {
+			for (var j = 0; j < 5; j++) {
+				if (field[i][j] != 0 &&
+           field[i][j] == field[i - 1][j + 1] &&
+           field[i][j] == field[i - 2][j + 2] &&
+           field[i][j] == field[i - 3][j + 3])
+					 return field[i][j];
+			}
+		}
+		return 0;
+	}
+	
+	function restart() {
+		field = [[],[],[],[],[],[],[],[] ];
+	
+		turn = 1;
+		over = false;
+		winner = 1;
+		
+		for (var i = 0; i < 8; i++) {
+			for (var j = 0; j < 8; j++) {
+				field[i][j] = 0;
+			}
+		}
+		updateField();
+	}
+
+  
+  function getSymbol(i) {
+    if(i == 1) return '<img src="./images/blue.PNG">';
+    if(i == 2) return '<img src="./images/red.PNG">';
+		if(i == 3) return "Draw";
+    return '<img src="./images/empty.PNG">';
+  }
+	
+	
+	</script>
